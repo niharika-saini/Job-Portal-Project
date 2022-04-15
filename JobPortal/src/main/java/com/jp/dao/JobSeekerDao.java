@@ -2,6 +2,7 @@ package com.jp.dao;
 
 import java.util.List;
 
+import com.jp.entity.JobPosting;
 import com.jp.entity.JobPostingsView;
 import com.jp.entity.JobSeeker;
 

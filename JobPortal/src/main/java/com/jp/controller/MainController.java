@@ -16,7 +16,7 @@ import com.jp.entity.Company;
 import com.jp.entity.JobSeeker;
 
 @Controller
-//@RequestMapping(value = "/")
+@RequestMapping(value = "/")
 public class MainController {
 	
 	@RequestMapping("/jobs")
@@ -38,7 +38,7 @@ public class MainController {
 	@Autowired
 	CompanyDao companyDao;
 
-	@RequestMapping(value = "/login")
+	@RequestMapping(value = "/login" , method=RequestMethod.GET)
 	public String login(@RequestParam("emailId") String emailId, @RequestParam("password") String password,
 			@RequestParam("type") String type, Model model) {
 		List<String> list = new ArrayList<String>();

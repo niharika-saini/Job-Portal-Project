@@ -10,9 +10,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+// Annotation Calling 
+
 @Entity
 @Table(name="jobposting")
+
+// Class 
+
 public class JobPosting {
+	
+	// Methods of Class 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -43,6 +52,8 @@ public class JobPosting {
 	@Column(name = "salary")
 	private String salary;
 
+	
+	// Generate Getters and Setters 
 
 	public int getJobId() {
 		return jobId;

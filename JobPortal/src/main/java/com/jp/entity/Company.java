@@ -8,9 +8,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
+// Annotation Calling 
+
 @Entity
 @Table(name="comapany")
+
+// Class 
+
 public class Company {
+	
+	
+	// Methods of Class 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
@@ -36,9 +46,10 @@ public class Company {
 	private boolean verified;
 	@Column(name="verificationCode")
 	private int verificationCode;
-	/**
-	 * @return CompanyId
-	 */
+	
+	
+	// Generate Getters and Setters 
+	
 	public int getCompanyId() {
 		return companyId;
 	}

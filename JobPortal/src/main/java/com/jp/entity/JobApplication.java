@@ -37,23 +37,10 @@ public class JobApplication {
 	@Column(name="resume")
 	private boolean resume;
 	
-	@Column(name="resumePath")
-	private String resumePath;
 	
 	@Column(name="state")
 	private int state;
 	
-	@Column(name="interviewFlag")
-	private boolean interviewFlag;
-	
-	@Column(name="interviewLocation")
-	private String interviewLocation;
-	
-	@Column(name="interviewTime")
-	private Date interviewTime;
-	
-	@Column(name="interviewAccepted")
-	private boolean interviewAccepted;
 	
 	public int getAppId() {
 		return appId;
@@ -86,14 +73,7 @@ public class JobApplication {
 		this.resume = resume;
 	}
 
-	public String getResumePath() {
-		return resumePath;
-	}
-
-	public void setResumePath(String resumePath) {
-		this.resumePath = resumePath;
-	}
-
+	
 	public int getState() {
 		return state;
 	}
@@ -102,36 +82,5 @@ public class JobApplication {
 		this.state = state;
 	}
 
-	public boolean isInterviewFlag() {
-		return interviewFlag;
-	}
-
-	public void setInterviewFlag(boolean interviewFlag) {
-		this.interviewFlag = interviewFlag;
-	}
-
-	public String getInterviewLocation() {
-		return interviewLocation;
-	}
-
-	public void setInterviewLocation(String interviewLocation) {
-		this.interviewLocation = interviewLocation;
-	}
-
-	public Date getInterviewTime() {
-		return interviewTime;
-	}
-
-	public void setInterviewTime(Date interviewTime) {
-		this.interviewTime = interviewTime;
-	}
-
-	public boolean isInterviewAccepted() {
-		return interviewAccepted;
-	}
-
-	public void setInterviewAccepted(boolean interviewAccepted) {
-		this.interviewAccepted = interviewAccepted;
-	}
-
+	
 }

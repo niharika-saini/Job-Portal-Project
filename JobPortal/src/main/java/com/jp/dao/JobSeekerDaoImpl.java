@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import com.jp.entity.JobPosting;
 import com.jp.entity.JobPostingsView;
 import com.jp.entity.JobSeeker;
 
@@ -134,22 +135,17 @@ public class JobSeekerDaoImpl implements JobSeekerDao{
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.baeldung.spring.dao.JobSeekerDao#searchJobs(java.lang.String)
-	 */
 	@Override
 	public List<?> searchJobs(String searchString) {
 		searchString = "%" + searchString + "%";
 		searchString = searchString.replaceAll(" ", "% %");
 		String searchStringArray[] = searchString.split(" ");
-		String selectQuery = "SELECT jobId FROM JobPostingsView jp";
+		String selectQuery = "SELECT jobId FROM JobPosting jp";
 		if (!searchString.isEmpty()) {
 			selectQuery = selectQuery.concat(" WHERE ");
 		}
 
-		for (int i = 0; i < searchStringArray.length; i++) {
+	for (int i = 0; i < searchStringArray.length; i++) {
 			selectQuery = selectQuery.concat("jp.keywords LIKE :searchParam" + i);
 			if (i != searchStringArray.length - 1) {
 				selectQuery = selectQuery.concat(" AND ");

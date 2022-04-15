@@ -48,8 +48,11 @@ public class JobSeekerController {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	
+	// Search Job Mapping 
+	
 	@RequestMapping(value = "/searchjobs", method = RequestMethod.GET)
-	public String searchJobs(@RequestParam("userId") String userId,
+	public List<?> searchJobs(@RequestParam("userId") String userId,
 			@RequestParam("search") Optional<String> searchString,
 			@RequestParam("locations") Optional<String> locations,
 			@RequestParam("companies") Optional<String> companies, 
@@ -82,7 +85,7 @@ public class JobSeekerController {
 		model.addAttribute("jobs", jp);
 		model.addAttribute("seeker", jobseeker);
 		
-		return "jobsearch";
+		return jobSeekerDao.searchJobs(search);
 	}
 
 	@Autowired
@@ -90,6 +93,8 @@ public class JobSeekerController {
 	
 	@Autowired
 	JobPostingDao jobDao;
+	
+	// Show JObs mapping 
 	
 	@RequestMapping(value = "/showjob", method = RequestMethod.GET)
 	public String showJob(@RequestParam("userId") String userId, @RequestParam("jobId") String jobId, Model model) {
@@ -119,7 +124,7 @@ public class JobSeekerController {
 		return "userjobprofile";
 	}
 
-	@RequestMapping(value = "/createuser", method = RequestMethod.POST)
+	@RequestMapping(value = "/createuser", method = RequestMethod.POST)  //http://localhost:5678/createuser
 	public String createJobSeeker(@RequestParam("name") String name, @RequestParam("email") String email,
 			@RequestParam("password") String password, @RequestParam("type") String type, Model model)
 			throws IOException, SQLException {
@@ -147,7 +152,7 @@ public class JobSeekerController {
 						+ randomPIN + "&type=seeker";
 
 				
-				return "CodeSent";
+				return "Seeker successfully Registered";
 
 			}
 
@@ -169,7 +174,7 @@ public class JobSeekerController {
 				
 
 				// Company c1 =companyDao.
-				return "CodeSent";
+				return "Company Successfully Registered";
 			}
 
 		} catch (SQLException se) {
@@ -210,16 +215,8 @@ public class JobSeekerController {
 		return "updateSeeker";
 	}
 	
-	@RequestMapping(value = "/userprofile/{id}")
-	public String showJobSeeker(@PathVariable("id") int id, Model model){
-		
-		JobSeeker jobseeker = jobSeekerDao.getJobSeeker(id);
-		
-		model.addAttribute("seeker", jobseeker);
-		return "seeker"; 
-	}
-
-	@RequestMapping(value = "/Update")
+	
+	@RequestMapping(value = "/Update")  //http://localhost:5678/Update
 	public String updateJobSeeker(@RequestParam("id") String id, @RequestParam("firstName") Optional<String> firstName,
 			@RequestParam("lastName") Optional<String> lastName, @RequestParam("emailId") Optional<String> emailId,
 			@RequestParam("highestEducation") Optional<String> highestEducation,
@@ -275,8 +272,8 @@ public class JobSeekerController {
 		return "userprofile";
 
 	}
-
-	@RequestMapping(value = "/update/company")
+ 
+	@RequestMapping(value = "/update/company" )//, method = RequestMethod.PUT)  //http://localhost:5678/update/company
 	public String companyupdate(@RequestParam("id") String id, @RequestParam("companyName") Optional<String> name,
 			@RequestParam("headquarters") Optional<String> headquarters,
 			@RequestParam("companyUser") Optional<String> user,
@@ -392,7 +389,7 @@ public class JobSeekerController {
 				model.addAttribute("applied", 1);
 				
 				
-				return "userjobprofile";
+				return "Deleted";
 
 			} else {
 				return "error";
@@ -439,6 +436,8 @@ public class JobSeekerController {
 		}
 		return jobIdList;
 	}
+	
+	
 	
 
 }

@@ -18,9 +18,19 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+
+// Annotation Calling 
+
 @Entity
 @Table(name="jobseeker")
+
+// Class 
+
 public class JobSeeker {
+	
+	
+	
+	// Methods of Class 
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +72,8 @@ public class JobSeeker {
 	@OneToMany(mappedBy="jobSeeker", cascade = CascadeType.ALL)
 	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="appId")
 	private List<JobApplication> jobApplicationList;
+	
+	// Generate Getters and Setters 
 
 	public int getJobseekerId() {
 		return jobseekerId;

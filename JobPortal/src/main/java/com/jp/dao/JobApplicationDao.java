@@ -7,7 +7,7 @@ public interface JobApplicationDao {
 	boolean cancel(int jobAppId);
 
 	
-	JobApplication apply(int jobseekerId, int jobId, boolean resumeFlag, String resumePath);
+	JobApplication apply(int jobseekerId, int jobId, boolean resumeFlag);
 
 	
 	JobApplication getJobApplication(int jobAppId);
@@ -17,5 +17,8 @@ public interface JobApplicationDao {
 	
 	
 	JobApplication updateApplication(JobApplication ja);
+
+
+	
 
 }

@@ -18,7 +18,7 @@ public class JobApplicationDaoImpl  implements JobApplicationDao{
 	private EntityManager entityManager;
 
 	@Override
-	public JobApplication apply(int jobseekerId, int jobId, boolean resumeFlag, String resumePath) {
+	public JobApplication apply(int jobseekerId, int jobId, boolean resumeFlag) {
 		JobApplication ja = new JobApplication();
 		try {
 			JobSeeker js = entityManager.find(JobSeeker.class, jobseekerId);
@@ -26,9 +26,7 @@ public class JobApplicationDaoImpl  implements JobApplicationDao{
 			ja.setJobPosting(jp);
 			ja.setJobSeeker(js);
 			ja.setResume(resumeFlag);
-			if (!resumePath.equals(null)) {
-				ja.setResumePath(resumePath);
-			}
+			
 			ja.setState(0);
 			entityManager.persist(ja);
 		} catch (Exception e) {
@@ -76,5 +74,7 @@ public class JobApplicationDaoImpl  implements JobApplicationDao{
 		entityManager.merge(ja);
 		return null;
 	}
+
+	
 
 }

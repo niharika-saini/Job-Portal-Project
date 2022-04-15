@@ -21,7 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -43,14 +44,16 @@ import com.jp.entity.JobApplication;
 import com.jp.entity.JobPosting;
 import com.jp.entity.JobSeeker;
 
-@RestController
-@RequestMapping("/jobapplication")
+
+
+
+@Controller
+@RequestMapping(value = "/application")
 public class JobApplicationController {
-	
+
 	@Autowired
 	JobSeekerDao jobSeekerDao;
 
-	
 
 	@Autowired
 	JobPostingDao jobDao;
@@ -64,7 +67,7 @@ public class JobApplicationController {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	private static String UPLOADED_FOLDER = "C:/";
+	
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String applyPage(@RequestParam("userId") String jobSeekerId, @RequestParam("jobId") String jobId,
@@ -76,65 +79,45 @@ public class JobApplicationController {
 	
 	@RequestMapping(value = "/apply", method = RequestMethod.POST)
 	public String apply(@RequestParam("userId") String jobSeekerId, @RequestParam("jobId") String jobId,
-			@RequestParam("resumeFlag") boolean resumeFlag, @RequestParam("resumePath") String resumePath,
-			@RequestParam("file") Optional<MultipartFile> file, RedirectAttributes redirectAttributes, Model model) {
+			@RequestParam("resumeFlag") boolean resumeFlag,Model model) throws IOException {
 		if (resumeFlag == true) {
 
-			System.out.println("In Job Contraoller");
-			if (file.equals(Optional.empty())) {
-				System.out.println("Inside Empty");
-				redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-				return "redirect:uploadStatus";
-			}
-
-			try {
-				System.out.println("Inside Upload");
-				byte[] bytes = file.get().getBytes();
-				Path path = Paths.get(UPLOADED_FOLDER + file.get().getOriginalFilename());
-				JobApplication ja = new JobApplication();
-				ja = jobAppDao.apply(Integer.parseInt(jobSeekerId), Integer.parseInt(jobId), resumeFlag,
-						path.toString());// apply(Integer.parseInt(jobSeekerId),
-											// Integer.parseInt(jobId),
-											// resumeFlag, path);
-				JobSeeker js = jobSeekerDao.getJobSeeker(Integer.parseInt(jobSeekerId));
-				JobPosting jp = jobDao.getJobPosting(Integer.parseInt(jobId));
-				
-				Company company = jp.getCompany();
-				List<?> ij = interestedDao.getAllInterestedJobId(Integer.parseInt(jobSeekerId));
-				int i = 0;
-				int j = 0;
-				if (ij.contains(Integer.parseInt(jobId))) {
-					i = 1;
-				}
-
-				List<Integer> il = getAppliedJobs(jobSeekerId);
-				if (il.contains(Integer.parseInt(jobId))) {
-					j = 1;
-				}
-
-				model.addAttribute("job", jp);
-				model.addAttribute("seeker", js);
-				model.addAttribute("company", company);
-				model.addAttribute("interested", i);
-				model.addAttribute("applied", j);
-				System.out.println(path);
-				Files.write(path, bytes);
-				System.out.println(path);
-				return "userjobprofile";
-
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			return "redirect:/userjobprofile";
-
-		} else {
+			
+			//byte[] bytes = file.get().getBytes();
+			//Path path = Paths.get(UPLOADED_FOLDER + file.get().getOriginalFilename());
 			JobApplication ja = new JobApplication();
-			ja = jobAppDao.apply(Integer.parseInt(jobSeekerId), Integer.parseInt(jobId), resumeFlag, resumePath);
+			ja = jobAppDao.apply(Integer.parseInt(jobSeekerId), Integer.parseInt(jobId), resumeFlag
+					);
 			JobSeeker js = jobSeekerDao.getJobSeeker(Integer.parseInt(jobSeekerId));
 			JobPosting jp = jobDao.getJobPosting(Integer.parseInt(jobId));
 			
+			Company company = jp.getCompany();
+			List<?> ij = interestedDao.getAllInterestedJobId(Integer.parseInt(jobSeekerId));
+			int i = 0;
+			int j = 0;
+			if (ij.contains(Integer.parseInt(jobId))) {
+				i = 1;
+			}
+
+			List<Integer> il = getAppliedJobs(jobSeekerId);
+			if (il.contains(Integer.parseInt(jobId))) {
+				j = 1;
+			}
+
+			model.addAttribute("job", jp);
+			model.addAttribute("seeker", js);
+			model.addAttribute("company", company);
+			model.addAttribute("interested", i);
+			model.addAttribute("applied", j);
+			return "userjobprofile";
+
+		} else {
+			JobApplication ja = new JobApplication();
+			ja = jobAppDao.apply(Integer.parseInt(jobSeekerId), Integer.parseInt(jobId), resumeFlag);
+			JobSeeker js = jobSeekerDao.getJobSeeker(Integer.parseInt(jobSeekerId));
+			JobPosting jp = jobDao.getJobPosting(Integer.parseInt(jobId));
+		
+					
 			Company company = jp.getCompany();
 			List<?> ij = interestedDao.getAllInterestedJobId(Integer.parseInt(jobSeekerId));
 			int i = 0, j = 0;
@@ -159,7 +142,7 @@ public class JobApplicationController {
 
 	}
 
-	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
+	@RequestMapping(value = "/cancel", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public String cancelApplication(@RequestParam("jobApplicationId") String jobAppId) {
 		boolean deleted = jobAppDao.cancel(Integer.parseInt(jobAppId));
@@ -179,60 +162,8 @@ public class JobApplicationController {
 		return "modified";
 	}
 
-	// ***************************************************
-	@RequestMapping("/viewResume")
-	public void downloadPDFResource(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("Id") int id) throws IOException {
-		JobApplication j1 = jobAppDao.getJobApplication(id);
-		String path = j1.getResumePath();
-
-		File file = new File(path);
-		System.out.println(file);
-
-		if (file.exists()) {
-			System.out.println("File Found");
-			response.setContentType("application/pdf");
-			response.addHeader("Content-Disposition", String.format("attachment; filename=\"" + file.getName() + "\""));
-			InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-
-			// Copy bytes from source to destination(outputstream in this
-			// example), closes both streams.
-			FileCopyUtils.copy(inputStream, response.getOutputStream());
-
-		}
-
-	}
-
-	@PostMapping("/upload") // //new annotation since 4.3
-	public String singleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-
-		if (file.isEmpty()) {
-			redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-			return "redirect:uploadStatus";
-		}
-
-		try {
-			byte[] bytes = file.getBytes();
-			Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-			Files.write(path, bytes);
-			System.out.println(path);
-
-			redirectAttributes.addFlashAttribute("message",
-					"You successfully uploaded '" + file.getOriginalFilename() + "'");
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return "redirect:/uploadStatus";
-	}
-
-	@GetMapping("/uploadStatus")
-	public String uploadStatus() {
-		return "uploadStatus";
-	}
-
-	@RequestMapping(value = "/company/getAppliedJobs")
+	
+	@RequestMapping(value = "/company/getAppliedJobs", method = RequestMethod.GET)
 	public ResponseEntity<?> getAppliedJobs(@RequestParam("companyId") int id) {
 		Query query = entityManager.createQuery("SELECT jobId FROM JobPosting jp WHERE jp.companyId = :id");
 		query.setParameter("id", id);

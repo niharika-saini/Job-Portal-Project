@@ -185,7 +185,7 @@ body {
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="/findjobs">JOB</a>
+					<a class="navbar-brand" href="/User.html">JOB</a>
 				</div>
 				
 			</div>
@@ -208,7 +208,12 @@ body {
 						type="text" class="form-control" name="searchString"
 						placeholder="Enter Search Keywords" >
 				</div>
-				<input type="hidden" name="userId" value="${seeker.jobseekerId}"></input>
+				<div class="form-group col-sm-4">
+					<label class="col-sm-12" for="cname">User ID</label> <input
+						type="text" class="form-control" name="userId">
+				</div>
+				
+				
 				<div class="form-group col-sm-4">
 					<label class="col-sm-12" for="cname">Company name</label> <input
 						type="text" class="form-control" name="companies"
@@ -234,77 +239,7 @@ body {
 				<button type="submit" class="btn btn-primary">Search</button>
 			</form>
 		</div>
-		<div class="results">
-			<h2>Search Results:</h2>
-			<p>${fn:length(jobs)} search results</p>
-
-			
-
-			<c:forEach items="${jobs}" var="job">
-				<a class="a1" href="/showjob?userId=${seeker.jobseekerId}&jobId=${job[0]}">${job[1]}</a>
-				<div class="row">
-					<div class="col-sm-4 groups">
-						<p>
-							<b>jobId:</b> ${job[0]}
-						</p>
-						<p>
-							<b>location:</b> ${job[4]}
-						</p>
-						<p>
-							<b>Salary:</b> $ ${job[5]}
-						</p>
-						
-						<p>
-							<b>Posted by:</b> ${job[8]}
-						</p>
-					</div>
-					<div class="col-sm-8">
-						<p>
-							<b>Status:</b>
-							<c:if test="${job[7] == 0}">
-								<c:out value="Open" />
-							</c:if>
-							<c:if test="${job[7] == 1}">
-								<c:out value="Filled" />
-							</c:if>
-							<c:if test="${job[7] == 2}">
-								<c:out value="Cancelled" />
-							</c:if>
-						</p>
-						<p>
-							<b>Responsibilities :</b> ${job[3]}
-						</p>
-						<p>
-							<b>Description:</b> ${job[2]}
-						</p>
-					</div>
-				</div>
-				<hr />
-			</c:forEach>
-			<!-- <p>Posted by: <c:out value="${job.company}"></c:out></p>
-    <p>Status: <c:out value="${job.location}"></c:out></p>
-    <p>Status: <c:out value="${job.salary}"></c:out></p>
-    <p>${job.description}</p>
-     -->
-
-		</div>
-
-
 		
-	</div>
-	</div>
-
-	<script>
-		// Get the modal
-		var modal = document.getElementById('id01');
-		// When the user clicks anywhere outside of the modal, close it
-		window.onclick = function(event) {
-			if (event.target == modal) {
-				modal.style.display = "none";
-			}
-		}
-	</script>
-
 </body>
 
 </html>

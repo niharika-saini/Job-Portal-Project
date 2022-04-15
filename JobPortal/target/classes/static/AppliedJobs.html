@@ -179,40 +179,36 @@ body {
 			</h1>
 			<div class="col-lg-12 well">
 				<div class="row">
-					<form action="/createuser" method="post">
-						<div class="form-group well">
-							<div class="btn-group btn-group-justified" data-toggle="buttons">
-								<label class="btn btn-default active"> <input
-									type="radio" name="type" id="seeker" value="seeker"
-									autocomplete="off" checked> Job Seeker
-								</label> <label class="btn btn-default"> <input type="radio"
-									name="type" id="recruiter" value="recruiter"
-									autocomplete="off"> Recruiter
-								</label>
-
-							</div>
-						</div>
+					<form action="/jobapplication/apply" method="post">
 						<div class="col-sm-12">
 							<div class="row">
 								
-									<label>Name*</label> <input type="text"
-										placeholder="Enter Full Name Here.." class="form-control" name="name">
+									<label>JobSeeker ID</label> <input type="text"
+										placeholder="enter job seeker id " class="form-control" name="userId">
 								
 							</div>
 
 							<div class="form-group">
-								<label>Email Address *</label> <input type="text" name="email"
-									placeholder="Enter Email Address Here.." class="form-control"
-									name="email" required>
+								<label>Job ID</label> <input type="text" name="jobId"
+									placeholder="Enter job Id Here.." class="form-control" required>
+							
 							</div>
-							<div class="form-group">
-								<label><b>Password *</b></label> <input type="password" name="password"
-									placeholder="Enter Password" class="form-control"
-									required>
+							
+							 
+							 <div class="form-group">
+								<label>Resume /label> <input type="text" name="resumeFlag"
+									placeholder="Want to add resume" class="form-control" required>
+							
 							</div>
+							
+							
+							
+							
+                          
+                          
+                          
 
-
-							<button type="submit" class="btn btn-lg btn-primary">Submit</button>
+							<button type="submit" class="btn btn-lg btn-primary">Applied</button>
 						</div>
 					</form>
 				</div>

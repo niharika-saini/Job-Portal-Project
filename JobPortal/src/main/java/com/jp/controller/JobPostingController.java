@@ -3,6 +3,7 @@ package com.jp.controller;
 
 //import java.net.http.HttpHeaders;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.http.MediaType;
 import org.json.simple.JSONObject;
@@ -29,6 +30,8 @@ public class JobPostingController {
 	@Autowired
 	CompanyDao companyDao;
 
+	// Create Job post Mapping 
+	
 	@RequestMapping(value="/create")
 	public String showHomePage(@RequestParam("cid") String cid, Model model) {
 		System.out.println(cid);
@@ -39,17 +42,22 @@ public class JobPostingController {
 		return "postjob";
 	}
 
+	
+	// Job Post Mapping 
+	
 	@RequestMapping("/jobPost")
-	public String createJobPosting(@RequestParam("title") String title, @RequestParam("description") String description,
+	public String createJobPosting(@RequestParam("companyName") String cname ,@RequestParam("title") String title, @RequestParam("description") String description,
 			@RequestParam("responsibilities") String responsibilities, @RequestParam("location") String location,
-			@RequestParam("salary") String salary, @RequestParam("company") String cid, Model model) {
+			@RequestParam("salary") String salary, @RequestParam("companyId") String cid, Model model) {
 		JobPosting j = new JobPosting();
+		j.setCompanyName(cname);
 		j.setTitle(title);
 		//j.setState(state);
 		j.setDescription(description);
 		j.setResponsibilities(responsibilities);
 		j.setLocation(location);
 		j.setSalary(salary);
+		
 
 		try {
 			System.out.println("0");
@@ -101,7 +109,7 @@ public class JobPostingController {
 	}
 	
 
-	@RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
 	public String updateJobPosting(@PathVariable("id") int id, @RequestParam("CompanyName") String cname,
 			@RequestParam("title") String title, @RequestParam("description") String description,
 			@RequestParam("responsibilities") String responsibilities, @RequestParam("location") String location,
@@ -135,6 +143,14 @@ public class JobPostingController {
 			return "Error";
 		}
 		return "modified";
+	}
+	
+	
+	
+	@RequestMapping(value="/ShowAllJobs",method = RequestMethod.GET)
+	public List<JobPosting> getAllJobPosting() {
+		return jobDao.getAllJobPosting();
+		
 	}
 
 }
